@@ -37,14 +37,14 @@ public class Options {
 
 
     } catch (UnrecognizedOptionException e) {
-      System.out.println(resourceBundle.getString(Constants.UNRECOGNIZED_OPTION));
+      System.out.printf(resourceBundle.getString(Constants.UNRECOGNIZED_OPTION));
       throw e;
     } catch (MissingOptionException e) {
       // Use this in error msg (Option) e.getMissingOptions().get(0)
-      System.out.println(resourceBundle.getString(Constants.MISSING_OPTION));
+      System.out.printf(resourceBundle.getString(Constants.MISSING_OPTION));
       throw e;
     } catch (MissingArgumentException e) {
-      System.out.println(resourceBundle.getString(Constants.ARGUMENT_ERROR));// Print out error message from usage strings
+      System.out.printf(resourceBundle.getString(Constants.ARGUMENT_ERROR));// Print out error message from usage strings
       // Use this in error msg e.getOption().getLongOpt()
       throw e;
     } catch (ParseException e) {
@@ -86,10 +86,12 @@ public class Options {
       if(map.containsKey(Constants.EXCLUDES_ORDER)) {
         System.out.println(Constants.MODE_SELECT_ERROR);
       }
+      if (map.containsKey(Constants.LENGTH_OPTION)) {
       int length = ((Number) map.get(Constants.LENGTH_OPTION)).intValue();
-      if ((length < Constants.MINIMUM_PASSPHRASE_LENGTH) || (length > Constants.MAXIMUM_PASSPHRASE_LENGTH)) { // use a constant instead of "6"
+      if ((length < Constants.MINIMUM_PASSPHRASE_LENGTH) || (length > Constants.MAXIMUM_PASSPHRASE_LENGTH)) {
+        System.out.printf(resourceBundle.getString(Constants.LENGTH_ERROR));// use a constant instead of "6"
         throw new IllegalArgumentException(String.format(Constants.LENGTH_ERROR));
-
+        }
       }
     }
   }
@@ -100,7 +102,7 @@ public class Options {
     org.apache.commons.cli.CommandLine cmdLine = parser.parse(options, args);
     ResourceBundle resourceBundle = UsageStrings.getBundle();
 
-    if(cmdLine.hasOption(resourceBundle.getString(Constants.HELP_MSG))) {
+    if(cmdLine.hasOption(Constants.HELP_OPTION)) {
       throw new HelpRequestedException();
     }
     Map<String, Object> map = new HashMap<>(); // map is a field(lookup table)
@@ -122,39 +124,39 @@ public class Options {
     Option repeatOpt =         Option.builder("r").hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.NO_REPEAT_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_REPEAT))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_REPEAT)))
                                                        .build();
     Option uppercaseOpt =       Option.builder("u").hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.NO_UPPER_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_UPPERCASE))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_UPPERCASE)))
                                                        .build();
     Option lowercaseOpt =       Option.builder("w").hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.NO_LOWER_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_LOWERCASE))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_LOWERCASE)))
                                                        .build();
     Option digitsOpt =          Option.builder("g").hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.NO_DIGITS_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_DIGITS))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_DIGITS)))
                                                        .build();
     Option ambiguousOpt =       Option.builder("a").hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.NO_AMBIGUOUS_CHARACTERS_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_AMBIGUOUS))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_AMBIGUOUS)))
                                                        .build();
     Option orderOpt =          Option.builder()        .hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.EXCLUDES_ORDER_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_ORDER))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_ORDER)))
                                                        .build();
     Option symbolsOpt =         Option.builder("s").hasArg(true)
                                                        .required(false)
                                                        .optionalArg(true)
                                                        .numberOfArgs(1)
                                                        .longOpt(Constants.EXCLUDES_SYMBOLS_OPTION)
-                                                       .desc(bundle.getString(Constants.EXCLUDES_SYMBOLS))
+                                                       .desc(String.format(bundle.getString(Constants.EXCLUDES_SYMBOLS)))
                                                        .type(String.class)
                                                        .build();
     Option lengthOpt =         Option.builder("l").argName("value") // TODO set its arg name
@@ -162,8 +164,8 @@ public class Options {
                                                        .hasArg(true)
                                                        .numberOfArgs(1)
                                                        .longOpt(Constants.LENGTH_OPTION)
-                                                       .desc(bundle.getString(Constants.SPECIFY_LENGTH))
-                                                       .required()
+                                                       .desc(String.format(bundle.getString(Constants.SPECIFY_LENGTH)))
+                                                       .required(false)
                                                        .type(Number.class)
                                                        .build(); // returns an option
     Option delimiterOpt =      Option.builder("d").argName("value") // set its arg name
@@ -171,19 +173,19 @@ public class Options {
                                                        .hasArg(true)
                                                        .numberOfArgs(1)
                                                        .longOpt(Constants.DELIMITER_OPTION)
-                                                       .desc(bundle.getString(Constants.SPECIFY_DELIMITER))
+                                                       .desc(String.format(bundle.getString(Constants.SPECIFY_DELIMITER)))
                                                        .required(false)
-                                                       .type(Character.class)
+                                                       .type(String.class)
                                                        .build();
     Option helpOpt =           Option.builder("?").longOpt(Constants.HELP_OPTION)
                                                        .required(false)
                                                        .hasArg(false)
-                                                       .desc(bundle.getString(Constants.HELP_MSG))
+                                                       .desc(String.format(bundle.getString(Constants.HELP_MSG)))
                                                        .build();
     Option modeOpt =           Option.builder("x").hasArg(false)
                                                        .required(false)
                                                        .longOpt(Constants.PASSWORD_MODE_OPTION)
-                                                       .desc(bundle.getString(Constants.MODE_SWITCH))
+                                                       .desc(String.format(bundle.getString(Constants.MODE_SWITCH)))
                                                        .build();
 
     org.apache.commons.cli.Options options = new org.apache.commons.cli.Options();
