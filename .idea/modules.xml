@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/deep-dive-passphrase-vault.iml" filepath="$PROJECT_DIR$/deep-dive-passphrase-vault.iml" />
+      <module fileurl="file://$PROJECT_DIR$/deep-dive-passphrase-vault-1.iml" filepath="$PROJECT_DIR$/deep-dive-passphrase-vault-1.iml" />
     </modules>
   </component>
 </project>
